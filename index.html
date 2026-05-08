@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synapster - Master Your Neural Path (Enhanced)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 50%, #06ffa5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .neural-bg {
+            background: radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(6, 255, 165, 0.1) 0%, transparent 50%);
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .skill-tag {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .skill-tag:hover {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.3) 0%, rgba(124, 58, 237, 0.3) 100%);
+            border-color: rgba(0, 212, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .skill-tag .remove-skill {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .skill-tag:hover .remove-skill {
+            opacity: 1;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3);
+        }
+        
+        .career-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .career-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #00d4ff 0%, #7c3aed 50%, #06ffa5 100%);
+            height: 8px;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        
+        .roadmap-step {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .roadmap-step.active {
+            border-left-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+        
+        .roadmap-step.completed {
+            border-left-color: #06ffa5;
+            background: rgba(6, 255, 165, 0.1);
+        }
+        
+        .fortune-cookie {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        .fortune-cookie:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 40px rgba(251, 191, 36, 0.3);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .animate-slideIn {
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .splash-logo {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #00d4ff, 0 0 30px #00d4ff, 0 0 40px #00d4ff; }
+            to { text-shadow: 0 0 10px #7c3aed, 0 0 20px #7c3aed, 0 0 30px #7c3aed; }
+        }
+        
+        .neural-network {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        #three-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .meter-circle {
+            stroke-dasharray: 251.2;
+            stroke-dashoffset: 251.2;
+            transition: stroke-dashoffset 1s ease;
+        }
+        
+        .analyzing {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .loading {
+            position: relative;
+        }
+        
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="splash" class="splash-screen">
+        <h1 class="splash-logo gradient-text">Synapster</h1>
+        <p class="text-xl opacity-80">Master your skills, fire your neurons.</p>
+    </div>
+
+    <div id="main-content" style="display: none;">
+        <div id="three-container"></div>
+        
+        <section class="min-h-screen flex items-center justify-center neural-bg relative">
+            <div class="container mx-auto px-6 text-center z-10">
+                <h1 class="text-6xl md:text-8xl font-bold mb-6 gradient-text animate-fadeIn">
+                    Master Your<br>Neural Path
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 opacity-90 animate-fadeIn">
+                    Fire your neurons and unlock career potential with AI-powered skill analysis,<br>
+                    personalized roadmaps, and intelligent career guidance.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fadeIn">
+                    <button onclick="scrollToSection('skills')" class="btn-primary px-8 py-4 rounded-full text-lg font-semibold">
+                        Start Your Journey
+                    </button>
+                    <button onclick="scrollToSection('features')" class="glass px-8 py-4 rounded-full text-lg font-semibold">
+                        Explore Features
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-20 neural-bg">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 gradient-text">Skills</h2>
+                    <p class="text-xl opacity-80">Tell us what you know, and we'll map your neural pathways</p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto glass rounded-3xl p-8">
+                    <div class="mb-8">
+                        <div class="flex gap-4 mb-6">
+                            <input 
+                                type="text" 
+                                id="skillInput" 
+                                placeholder="Add a skill (e.g., React, Python, Leadership)..." 
+                                class="flex-1 bg-gray-700 text-white px-6 py-4 rounded-full border border-gray-600 focus:border-blue-400 focus:outline-none"
+                                onkeypress="handleSkillInput(event)"
+                            >
+                            <button onclick="addSkill()" class="btn-primary px-8 py-4 rounded-full font-semibold">
+                                Add Skill
+                            </button>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <p class="text-sm opacity-70 mb-4">Popular skills (click to add):</p>
+                            <div class="flex flex-wrap gap-3 mb-4" id="suggestedSkills">
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">JavaScript</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">React</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">Python</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">Machine Learning</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">UI/UX Design</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">Data Analysis</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">Cloud Computing</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">DevOps</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">Mobile Development</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">Blockchain</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">Node.js</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">SQL</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">AWS</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">Docker</span>
+                                <span class="suggested-skill cursor-pointer bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-full text-sm transition-colors">Leadership</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <p class="text-sm opacity-70 mb-3">Your Skills:</p>
+                            <div id="skillTags" class="flex flex-wrap gap-3 min-h-[50px] border-2 border-dashed border-gray-600 rounded-xl p-4">
+                                <p class="text-gray-400 w-full text-center" id="emptySkillsMessage">No skills added yet. Add your first skill above!</p>
+                            </div>
+                        </div>
+                        
+                        <button id="analyzeBtn" onclick="analyzeSkills()" class="w-full btn-primary py-4 rounded-full text-lg font-semibold" disabled>
+                            <i class="fas fa-brain mr-2"></i>
+                            <span>Add skills to analyze</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="recommendations" class="py-20" style="display: none;">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 gradient-text">Career Recommendations</h2>
+                    <p class="text-xl opacity-80">AI-powered career paths tailored to your neural profile</p>
+                </div>
+                
+                <div id="careerRecommendations" class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                </div>
+                
+                <div class="text-center mt-12">
+                    <button onclick="scrollToSection('roadmap')" class="btn-primary px-8 py-4 rounded-full text-lg font-semibold">
+                        View Learning Roadmap
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="py-20 neural-bg" style="display: none;">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 gradient-text">Personalized Roadmap</h2>
+                    <p class="text-xl opacity-80">Your custom learning path based on skill analysis</p>
+                </div>
+                
+                <div class="max-w-6xl mx-auto">
+                    <div id="roadmapHeader" class="text-center mb-12">
+                        <h3 class="text-3xl font-bold mb-4">Loading your roadmap...</h3>
+                    </div>
+                    
+                    <div id="roadmap-content" class="space-y-8">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skill-gap" class="py-20" style="display: none;">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 gradient-text">Skill Gap Analysis</h2>
+                    <p class="text-xl opacity-80">Identify gaps and accelerate your neural growth</p>
+                </div>
+                
+                <div id="skillGapContent" class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                </div>
+            </div>
+        </section>
+
+        <section id="meter" class="py-20 neural-bg" style="display: none;">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 gradient-text">Career Readiness Meter</h2>
+                    <p class="text-xl opacity-80">Real-time assessment of your career preparedness</p>
+                </div>
+                
+                <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="text-center">
+                        <div class="relative w-80 h-80 mx-auto mb-8">
+                            <svg class="w-full h-full transform -rotate-90">
+                                <circle cx="160" cy="160" r="120" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="none"/>
+                                <circle id="meterCircle" cx="160" cy="160" r="120" stroke="url(#gradient)" stroke-width="8" fill="none" 
+                                        class="meter-circle" style="stroke-dashoffset: 125.6;"/>
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#00d4ff"/>
+                                        <stop offset="50%" style="stop-color:#7c3aed"/>
+                                        <stop offset="100%" style="stop-color:#06ffa5"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div id="overallScore" class="text-4xl font-bold gradient-text mb-2">0%</div>
+                                    <div class="text-lg opacity-70">Job Ready</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="readinessMessage" class="glass rounded-2xl p-6">
+                            <div class="text-blue-400 font-semibold mb-2">Analyzing...</div>
+                            <p class="text-sm opacity-80">Building your career readiness profile.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="meterBreakdown" class="space-y-6">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="fortune" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 gradient-text">Career Fortune Cookie</h2>
+                    <p class="text-xl opacity-80">Let AI glimpse into your professional future</p>
+                </div>
+                
+                <div class="max-w-2xl mx-auto text-center">
+                    <div class="fortune-cookie mb-8" onclick="crackFortune()">
+                        <div class="text-center">
+                            <i class="fas fa-star text-4xl text-white mb-2"></i>
+                            <div class="text-white font-bold">Click to reveal<br>your destiny</div>
+                        </div>
+                    </div>
+                    
+                    <div id="fortune-result" class="glass rounded-3xl p-8 opacity-0 transform scale-95 transition-all duration-500">
+                        <div class="text-2xl font-bold mb-4 gradient-text">Your Career Fortune</div>
+                        <p id="fortuneText" class="text-lg mb-6 italic">"The neural pathways you're building today will illuminate opportunities you can't yet imagine."</p>
+                        <p class="text-sm opacity-70">Powered by advanced neural prediction algorithms</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulator" class="py-20 neural-bg">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 gradient-text">Career Simulator</h2>
+                    <p class="text-xl opacity-80">Explore career scenarios and see instant predictions</p>
+                </div>
+                
+                <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
+                    <div class="glass rounded-3xl p-8">
+                        <h3 class="text-2xl font-bold mb-6">Configure Scenario</h3>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold mb-3">Select Scenario</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="selectScenario('skill')" class="scenario-btn bg-blue-500 text-white px-4 py-3 rounded-xl font-semibold">
+                                    What if I learn a new skill?
+                                </button>
+                                <button onclick="selectScenario('relocate')" class="scenario-btn bg-gray-700 text-white px-4 py-3 rounded-xl font-semibold">
+                                    What if I relocate?
+                                </button>
+                                <button onclick="selectScenario('industry')" class="scenario-btn bg-gray-700 text-white px-4 py-3 rounded-xl font-semibold">
+                                    What if I switch industries?
+                                </button>
+                                <button onclick="selectScenario('cert')" class="scenario-btn bg-gray-700 text-white px-4 py-3 rounded-xl font-semibold">
+                                    What if I get certified?
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold mb-3">Choose Option</label>
+                            <select id="simulatorSelect" class="w-full bg-gray-700 text-white px-4 py-3 rounded-xl border border-gray-600">
+                                <option>Select a skill...</option>
+                                <option>Machine Learning</option>
+                                <option>Blockchain</option>
+                                <option>AWS Cloud</option>
+                                <option>Data Science</option>
+                                <option>Mobile Development</option>
+                            </select>
+                        </div>
+                        
+                        <button onclick="runSimulation()" class="w-full btn-primary py-4 rounded-xl text-lg font-semibold">
+                            <i class="fas fa-play mr-2"></i>
+                            Run Simulation
+                        </button>
+                    </div>
+                    
+                    <div id="simulation-results" class="glass rounded-3xl p-8">
+                        <h3 class="text-2xl font-bold mb-6">Prediction Results</h3>
+                        <div class="text-center opacity-50">
+                            <i class="fas fa-chart-line text-6xl mb-4"></i>
+                            <p>Configure a scenario and run simulation to see predictions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="neural-dna" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mb-6 gradient-text">Neural DNA</h2>
+                    <p class="text-xl opacity-80">Your unique skill signature visualized</p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto glass rounded-3xl p-12">
+                    <canvas id="neuralDnaChart" style="height: 400px;"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-12 text-center opacity-70">
+            <p>&copy; 2024 Synapster. Designed by <i class="fas fa-brain text-blue-400"></i> Neural AI</p>
+        </footer>
+    </div>
+
+    <script>
+        let scene, camera, renderer, neuralSphere;
+        let userSkills = [];
+        let analysisResults = null;
+        let neuralDnaChart = null;
+        
+        const careerDatabase = {
+            'Full Stack Developer': {
+                requiredSkills: ['JavaScript', 'React', 'Node.js', 'HTML', 'CSS', 'Database', 'API Development'],
+                salaryRange: '$85,000 - $120,000',
+                growth: '+15%',
+                icon: 'fas fa-code',
+                color: 'bg-blue-500',
+                roadmap: [
+                    { title: 'Frontend Basics', duration: '2-3 months', skills: ['HTML', 'CSS', 'JavaScript'], status: 'foundation' },
+                    { title: 'React Framework', duration: '3-4 months', skills: ['React', 'Component Architecture', 'State Management'], status: 'current' },
+                    { title: 'Backend Development', duration: '4-5 months', skills: ['Node.js', 'Express', 'Database Design'], status: 'upcoming' },
+                    { title: 'Full Stack Integration', duration: '2-3 months', skills: ['API Integration', 'Authentication', 'Deployment'], status: 'upcoming' }
+                ]
+            },
+            'Data Scientist': {
+                requiredSkills: ['Python', 'Machine Learning', 'Statistics', 'SQL', 'Data Analysis', 'Pandas', 'Scikit-learn'],
+                salaryRange: '$95,000 - $140,000',
+                growth: '+20%',
+                icon: 'fas fa-chart-bar',
+                color: 'bg-green-500',
+                roadmap: [
+                    { title: 'Python & Statistics', duration: '3-4 months', skills: ['Python', 'Statistics', 'Pandas'], status: 'foundation' },
+                    { title: 'Machine Learning', duration: '4-6 months', skills: ['Scikit-learn', 'ML Algorithms', 'Model Validation'], status: 'current' },
+                    { title: 'Deep Learning', duration: '3-4 months', skills: ['TensorFlow', 'Neural Networks', 'Computer Vision'], status: 'upcoming' },
+                    { title: 'Data Engineering', duration: '2-3 months', skills: ['Big Data', 'Cloud Platforms', 'MLOps'], status: 'upcoming' }
+                ]
+            },
+            'Cloud Architect': {
+                requiredSkills: ['AWS', 'Cloud Computing', 'Architecture', 'DevOps', 'Security', 'Kubernetes', 'Docker'],
+                salaryRange: '$120,000 - $180,000',
+                growth: '+10%',
+                icon: 'fas fa-cloud',
+                color: 'bg-purple-500',
+                roadmap: [
+                    { title: 'Cloud Fundamentals', duration: '2-3 months', skills: ['AWS Basics', 'Cloud Concepts', 'Networking'], status: 'foundation' },
+                    { title: 'Infrastructure as Code', duration: '3-4 months', skills: ['Terraform', 'CloudFormation', 'CI/CD'], status: 'current' },
+                    { title: 'Container Orchestration', duration: '3-4 months', skills: ['Docker', 'Kubernetes', 'Microservices'], status: 'upcoming' },
+                    { title: 'Security & Governance', duration: '2-3 months', skills: ['Cloud Security', 'Compliance', 'Monitoring'], status: 'upcoming' }
+                ]
+            },
+            'DevOps Engineer': {
+                requiredSkills: ['Docker', 'Kubernetes', 'AWS', 'CI/CD', 'Linux', 'Automation', 'Monitoring'],
+                salaryRange: '$90,000 - $130,000',
+                growth: '+18%',
+                icon: 'fas fa-cogs',
+                color: 'bg-teal-500',
+                roadmap: [
+                    { title: 'Infrastructure Basics', duration: '2-3 months', skills: ['Linux', 'Networking', 'Scripting'], status: 'foundation' },
+                    { title: 'Containerization', duration: '3-4 months', skills: ['Docker', 'Container Registry', 'Docker Compose'], status: 'current' },
+                    { title: 'Orchestration', duration: '4-5 months', skills: ['Kubernetes', 'Helm', 'Service Mesh'], status: 'upcoming' },
+                    { title: 'CI/CD & Monitoring', duration: '2-3 months', skills: ['Jenkins', 'GitLab CI', 'Prometheus'], status: 'upcoming' }
+                ]
+            },
+            'UI/UX Designer': {
+                requiredSkills: ['UI/UX Design', 'Figma', 'Prototyping', 'User Research', 'Design Systems', 'Adobe Creative Suite'],
+                salaryRange: '$70,000 - $110,000',
+                growth: '+12%',
+                icon: 'fas fa-paint-brush',
+                color: 'bg-pink-500',
+                roadmap: [
+                    { title: 'Design Fundamentals', duration: '2-3 months', skills: ['Design Principles', 'Color Theory', 'Typography'], status: 'foundation' },
+                    { title: 'UX Research', duration: '3-4 months', skills: ['User Research', 'Personas', 'User Journey Mapping'], status: 'current' },
+                    { title: 'Prototyping & Tools', duration: '3-4 months', skills: ['Figma', 'Sketch', 'Interactive Prototypes'], status: 'upcoming' },
+                    { title: 'Design Systems', duration: '2-3 months', skills: ['Component Libraries', 'Style Guides', 'Accessibility'], status: 'upcoming' }
+                ]
+            },
+            'Mobile Developer': {
+                requiredSkills: ['Mobile Development', 'React Native', 'iOS', 'Android', 'Swift', 'Kotlin', 'API Integration'],
+                salaryRange: '$80,000 - $125,000',
+                growth: '+14%',
+                icon: 'fas fa-mobile-alt',
+                color: 'bg-indigo-500',
+                roadmap: [
+                    { title: 'Mobile Fundamentals', duration: '2-3 months', skills: ['Mobile UI/UX', 'Platform Guidelines'], status: 'foundation' },
+                    { title: 'Cross-Platform Development', duration: '4-5 months', skills: ['React Native', 'Flutter', 'Expo'], status: 'current' },
+                    { title: 'Native Development', duration: '4-6 months', skills: ['Swift', 'Kotlin', 'Platform APIs'], status: 'upcoming' },
+                    { title: 'App Store Optimization', duration: '2-3 months', skills: ['Publishing', 'Analytics', 'Performance'], status: 'upcoming' }
+                ]
+            }
+        };
+        
+        const skillWeights = {
+            'JavaScript': { technical: 8, frontend: 10, backend: 6 },
+            'React': { technical: 8, frontend: 10, creative: 4 },
+            'Python': { technical: 9, analytical: 10, ml: 10 },
+            'Machine Learning': { technical: 9, analytical: 10, ml: 10 },
+            'UI/UX Design': { creative: 10, technical: 3, communication: 6 },
+            'Data Analysis': { analytical: 10, technical: 7 },
+            'Cloud Computing': { technical: 9, infrastructure: 10 },
+            'DevOps': { technical: 8, infrastructure: 10, automation: 10 },
+            'Mobile Development': { technical: 8, frontend: 8 },
+            'Blockchain': { technical: 9, innovation: 8 },
+            'Node.js': { technical: 8, backend: 10 },
+            'SQL': { technical: 7, analytical: 8, backend: 7 },
+            'AWS': { technical: 8, infrastructure: 10, cloud: 10 },
+            'Docker': { technical: 7, infrastructure: 9, devops: 10 },
+            'Leadership': { soft: 10, communication: 8, management: 10 },
+            'HTML': { technical: 5, frontend: 8 },
+            'CSS': { technical: 5, frontend: 8, creative: 6 }
+        };
+
+        const fortunes = [
+            "The neural pathways you're building today will illuminate opportunities you can't yet imagine.",
+            "Your unique combination of skills creates a competitive advantage that's purely yours.",
+            "The intersection of your interests and market demand reveals your golden career path.",
+            "Every skill learned creates exponential possibilities in your career matrix.",
+            "Your future success lies at the convergence of passion, skill, and emerging technologies.",
+            "The skills you're developing now will be the foundation of tomorrow's innovations.",
+            "Your diverse skill set positions you perfectly for the evolving job market.",
+            "The neural connections you're forming will unlock doors to extraordinary opportunities."
+        ];
+
+        function initSplash() {
+            setTimeout(() => {
+                document.getElementById('splash').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    init3D();
+                    initEventListeners();
+                }, 500);
+            }, 2500);
+        }
+
+        function init3D() {
+            const container = document.getElementById('three-container');
+            if (!container) return;
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            
+            try {
+                renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0x000000, 0);
+                container.appendChild(renderer.domElement);
+
+                const geometry = new THREE.IcosahedronGeometry(2, 1);
+                const material = new THREE.MeshPhongMaterial({
+                    color: 0x00d4ff,
+                    transparent: true,
+                    opacity: 0.6,
+                    wireframe: true
+                });
+                
+                neuralSphere = new THREE.Mesh(geometry, material);
+                scene.add(neuralSphere);
+
+                const light = new THREE.PointLight(0x7c3aed, 1, 100);
+                light.position.set(5, 5, 5);
+                scene.add(light);
+
+                const ambientLight = new THREE.AmbientLight(0x06ffa5, 0.3);
+                scene.add(ambientLight);
+
+                camera.position.z = 8;
+                animate();
+            } catch (error) {
+                console.log('WebGL not supported, using fallback');
+                container.innerHTML = '<div class="w-full h-full flex items-center justify-center"><i class="fas fa-brain text-8xl text-blue-400 animate-pulse"></i></div>';
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            if (neuralSphere) {
+                neuralSphere.rotation.x += 0.005;
+                neuralSphere.rotation.y += 0.01;
+            }
+            if (renderer) {
+                renderer.render(scene, camera);
+            }
+        }
+
+        function initEventListeners() {
+            // Add event listeners for suggested skills
+            document.querySelectorAll('.suggested-skill').forEach(skill => {
+                skill.addEventListener('click', function() {
+                    const skillText = this.textContent;
+                    addSkillToList(skillText);
+                    this.style.opacity = '0.5';
+                    this.style.pointerEvents = 'none';
+                });
+            });
+        }
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleSkillInput(event) {
+            if (event.key === 'Enter') {
+                addSkill();
+            }
+        }
+
+        function addSkill() {
+            const input = document.getElementById('skillInput');
+            const skillText = input.value.trim();
+            if (skillText) {
+                addSkillToList(skillText);
+                input.value = '';
+            }
+        }
+
+        function addSkillToList(skillText) {
+            if (!userSkills.includes(skillText)) {
+                userSkills.push(skillText);
+                updateSkillTags();
+                updateAnalyzeButton();
+            }
+        }
+
+        function removeSkill(skillText) {
+            const index = userSkills.indexOf(skillText);
+            if (index > -1) {
+                userSkills.splice(index, 1);
+                updateSkillTags();
+                updateAnalyzeButton();
+                
+                // Re-enable the suggested skill if it exists
+                document.querySelectorAll('.suggested-skill').forEach(skill => {
+                    if (skill.textContent === skillText) {
+                        skill.style.opacity = '1';
+                        skill.style.pointerEvents = 'auto';
+                    }
+                });
+            }
+        }
+
+        function updateSkillTags() {
+            const container = document.getElementById('skillTags');
+            const emptyMessage = document.getElementById('emptySkillsMessage');
+            
+            if (userSkills.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 w-full text-center" id="emptySkillsMessage">No skills added yet. Add your first skill above!</p>';
+            } else {
+                container.innerHTML = '';
+                userSkills.forEach(skill => {
+                    const skillTag = document.createElement('div');
+                    skillTag.className = 'skill-tag px-4 py-2 rounded-full text-sm relative';
+                    skillTag.innerHTML = `
+                        ${skill}
+                        <div class="remove-skill" onclick="removeSkill('${skill}')">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    `;
+                    container.appendChild(skillTag);
+                });
+            }
+        }
+
+        function updateAnalyzeButton() {
+            const btn = document.getElementById('analyzeBtn');
+            const btnText = btn.querySelector('span');
+            
+            if (userSkills.length === 0) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btnText.textContent = 'Add skills to analyze';
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnText.textContent = `Analyze ${userSkills.length} skill${userSkills.length > 1 ? 's' : ''}`;
+            }
+        }
+
+        function analyzeSkills() {
+            if (userSkills.length === 0) return;
+            
+            const btn = document.getElementById('analyzeBtn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+            
+            // Simulate analysis
+            setTimeout(() => {
+                analysisResults = performSkillAnalysis();
+                updateRecommendations();
+                updateRoadmap();
+                updateSkillGap();
+                updateMeter();
+                updateNeuralDNA();
+                
+                btn.classList.remove('loading');
+                btn.disabled = false;
+                
+                // Show sections
+                document.getElementById('recommendations').style.display = 'block';
+                document.getElementById('roadmap').style.display = 'block';
+                document.getElementById('skill-gap').style.display = 'block';
+                document.getElementById('meter').style.display = 'block';
+                
+                scrollToSection('recommendations');
+            }, 2000);
+        }
+
+        function performSkillAnalysis() {
+            const recommendations = [];
+            
+            for (const [career, data] of Object.entries(careerDatabase)) {
+                let matchScore = 0;
+                let matchedSkills = [];
+                let missingSkills = [];
+                
+                data.requiredSkills.forEach(reqSkill => {
+                    let found = false;
+                    userSkills.forEach(userSkill => {
+                        if (userSkill.toLowerCase().includes(reqSkill.toLowerCase()) || 
+                            reqSkill.toLowerCase().includes(userSkill.toLowerCase())) {
+                            found = true;
+                            if (!matchedSkills.includes(reqSkill)) {
+                                matchedSkills.push(reqSkill);
+                            }
+                        }
+                    });
+                    
+                    if (found) {
+                        matchScore += 1;
+                    } else {
+                        missingSkills.push(reqSkill);
+                    }
+                });
+                
+                const percentage = Math.round((matchScore / data.requiredSkills.length) * 100);
+                
+                recommendations.push({
+                    career,
+                    percentage,
+                    matchedSkills,
+                    missingSkills,
+                    ...data
+                });
+            }
+            
+            return recommendations.sort((a, b) => b.percentage - a.percentage);
+        }
+
+        function updateRecommendations() {
+            const container = document.getElementById('careerRecommendations');
+            container.innerHTML = '';
+            
+            analysisResults.slice(0, 4).forEach(career => {
+                const card = document.createElement('div');
+                card.className = 'career-card rounded-3xl p-8';
+                card.innerHTML = `
+                    <div class="w-16 h-16 ${career.color} rounded-full flex items-center justify-center mb-6">
+                        <i class="${career.icon} text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text">${career.career}</h3>
+                    <div class="text-4xl font-bold mb-2 text-green-400">${career.percentage}%</div>
+                    <p class="text-sm opacity-70 mb-4">${career.growth} growth</p>
+                    <p class="text-lg mb-4">${career.salaryRange}</p>
+                    <div class="progress-bar mb-4" style="width: ${career.percentage}%;"></div>
+                    <div class="flex flex-wrap gap-2">
+                        ${career.matchedSkills.slice(0, 4).map(skill => 
+                            `<span class="skill-tag px-3 py-1 rounded-full text-xs">${skill}</span>`
+                        ).join('')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function updateRoadmap() {
+            if (!analysisResults || analysisResults.length === 0) return;
+            
+            const topCareer = analysisResults[0];
+            const header = document.getElementById('roadmapHeader');
+            const content = document.getElementById('roadmap-content');
+            
+            header.innerHTML = `
+                <h3 class="text-3xl font-bold mb-4 gradient-text">${topCareer.career} Learning Path</h3>
+                <p class="text-lg opacity-80">Personalized roadmap based on your current skills</p>
+            `;
+            
+            content.innerHTML = '';
+            
+            topCareer.roadmap.forEach((step, index) => {
+                let status = 'upcoming';
+                const hasRequiredSkills = step.skills.some(skill => 
+                    userSkills.some(userSkill => 
+                        userSkill.toLowerCase().includes(skill.toLowerCase()) || 
+                        skill.toLowerCase().includes(userSkill.toLowerCase())
+                    )
+                );
+                
+                if (hasRequiredSkills) {
+                    status = index === 0 ? 'completed' : 'active';
+                } else if (index === 0 || topCareer.roadmap.slice(0, index).some(prevStep => 
+                    prevStep.skills.some(skill => 
+                        userSkills.some(userSkill => 
+                            userSkill.toLowerCase().includes(skill.toLowerCase()) || 
+                            skill.toLowerCase().includes(userSkill.toLowerCase())
+                        )
+                    )
+                )) {
+                    status = 'active';
+                }
+                
+                const stepDiv = document.createElement('div');
+                stepDiv.className = `roadmap-step ${status} p-8 rounded-3xl`;
+                
+                let icon = 'fas fa-circle';
+                if (status === 'completed') icon = 'fas fa-check';
+                else if (status === 'active') icon = 'fas fa-play';
+                
+                stepDiv.innerHTML = `
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 ${status === 'completed' ? 'bg-green-500' : status === 'active' ? 'bg-blue-500' : 'bg-gray-600'} rounded-full flex items-center justify-center mr-4">
+                            <i class="${icon} text-sm text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">${step.title}</h3>
+                        <span class="ml-auto text-sm opacity-70">${step.duration}</span>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        ${step.skills.map(skill => {
+                            const hasSkill = userSkills.some(userSkill => 
+                                userSkill.toLowerCase().includes(skill.toLowerCase()) || 
+                                skill.toLowerCase().includes(userSkill.toLowerCase())
+                            );
+                            return `<span class="skill-tag px-3 py-1 rounded-full text-sm ${hasSkill ? 'bg-green-500 bg-opacity-20' : ''}">${skill}</span>`;
+                        }).join('')}
+                    </div>
+                `;
+                
+                content.appendChild(stepDiv);
+            });
+        }
+
+        function updateSkillGap() {
+            if (!analysisResults || analysisResults.length === 0) return;
+            
+            const topCareer = analysisResults[0];
+            const container = document.getElementById('skillGapContent');
+            
+            const categories = [
+                {
+                    name: 'Technical Skills',
+                    priority: 'high',
+                    current: Math.min(85, topCareer.percentage + 10),
+                    target: 90,
+                    improvements: topCareer.missingSkills.slice(0, 3)
+                },
+                {
+                    name: 'Soft Skills',
+                    priority: 'medium',
+                    current: 69,
+                    target: 85,
+                    improvements: ['Team Leadership', 'Technical Writing', 'Project Management']
+                },
+                {
+                    name: 'Industry Knowledge',
+                    priority: 'high',
+                    current: Math.max(60, topCareer.percentage - 15),
+                    target: 80,
+                    improvements: ['AI/ML Fundamentals', 'Cloud Architecture', 'Security Best Practices']
+                },
+                {
+                    name: 'Tools & Frameworks',
+                    priority: 'low',
+                    current: Math.min(80, topCareer.percentage),
+                    target: 95,
+                    improvements: topCareer.missingSkills.slice(3, 6)
+                }
+            ];
+            
+            container.innerHTML = '';
+            
+            categories.forEach(category => {
+                const priorityColors = {
+                    'high': 'bg-red-500',
+                    'medium': 'bg-yellow-500',
+                    'low': 'bg-green-500'
+                };
+                
+                const card = document.createElement('div');
+                card.className = 'glass rounded-3xl p-8';
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold">${category.name}</h3>
+                        <span class="${priorityColors[category.priority]} px-3 py-1 rounded-full text-sm font-semibold ${category.priority === 'medium' ? 'text-black' : 'text-white'}">${category.priority} priority</span>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-2">
+                            <span>Current: ${category.current}%</span>
+                            <span>Target: ${category.target}%</span>
+                        </div>
+                        <div class="bg-gray-700 rounded-full h-2">
+                            <div class="progress-bar rounded-full" style="width: ${category.current}%;"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-2 text-sm opacity-80">
+                        ${category.improvements.map(improvement => `
+                            <div class="flex items-center">
+                                <i class="fas fa-arrow-right text-blue-400 mr-2"></i>
+                                ${improvement}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function updateMeter() {
+            if (!analysisResults || analysisResults.length === 0) return;
+            
+            const topCareer = analysisResults[0];
+            const overallScore = Math.round((topCareer.percentage + 69 + 75 + 80 + 65) / 5); // Average of all factors
+            
+            // Update circle
+            const circle = document.getElementById('meterCircle');
+            const circumference = 2 * Math.PI * 120;
+            const offset = circumference - (overallScore / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            // Update score
+            document.getElementById('overallScore').textContent = `${overallScore}%`;
+            
+            // Update message
+            const message = document.getElementById('readinessMessage');
+            let messageText = '';
+            let messageColor = '';
+            
+            if (overallScore >= 80) {
+                messageColor = 'text-green-400';
+                messageText = 'Excellent! You\'re highly competitive for your target role.';
+            } else if (overallScore >= 70) {
+                messageColor = 'text-yellow-400';
+                messageText = 'Good progress! Focus on filling skill gaps to reach the next level.';
+            } else {
+                messageColor = 'text-orange-400';
+                messageText = 'Keep building! You\'re on the right path but need more skills.';
+            }
+            
+            message.innerHTML = `
+                <div class="${messageColor} font-semibold mb-2">Assessment Complete!</div>
+                <p class="text-sm opacity-80">${messageText}</p>
+            `;
+            
+            // Update breakdown
+            const breakdown = document.getElementById('meterBreakdown');
+            const factors = [
+                { name: 'Technical Skills', score: Math.min(topCareer.percentage + 10, 95), icon: 'fas fa-code' },
+                { name: 'Experience Level', score: 70, icon: 'fas fa-briefcase' },
+                { name: 'Portfolio Quality', score: 88, icon: 'fas fa-folder' },
+                { name: 'Soft Skills', score: 65, icon: 'fas fa-users' },
+                { name: 'Industry Knowledge', score: Math.max(topCareer.percentage - 10, 60), icon: 'fas fa-industry' }
+            ];
+            
+            breakdown.innerHTML = '';
+            
+            factors.forEach(factor => {
+                const color = factor.score >= 80 ? 'text-green-400 bg-green-400' : 'text-yellow-400 bg-yellow-400';
+                const card = document.createElement('div');
+                card.className = 'glass rounded-2xl p-6';
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center">
+                            <i class="${factor.icon} ${color.split(' ')[0]} mr-3"></i>
+                            <span class="font-semibold">${factor.name}</span>
+                        </div>
+                        <span class="text-2xl font-bold ${color.split(' ')[0]}">${factor.score}%</span>
+                    </div>
+                    <div class="bg-gray-700 rounded-full h-2">
+                        <div class="${color.split(' ')[1]} rounded-full h-2" style="width: ${factor.score}%;"></div>
+                    </div>
+                `;
+                breakdown.appendChild(card);
+            });
+        }
+
+        function updateNeuralDNA() {
+            if (neuralDnaChart) {
+                neuralDnaChart.destroy();
+            }
+            
+            // Calculate neural DNA based on user skills
+            const dnaData = calculateNeuralDNA();
+            
+            const ctx = document.getElementById('neuralDnaChart').getContext('2d');
+            neuralDnaChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Technical', 'Creative', 'Analytical', 'Leadership', 'Communication', 'Problem Solving'],
+                    datasets: [{
+                        label: 'Your Neural DNA',
+                        data: dnaData,
+                        backgroundColor: 'rgba(0, 212, 255, 0.2)',
+                        borderColor: '#00d4ff',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#00d4ff',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ffffff' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#ffffff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#ffffff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function calculateNeuralDNA() {
+            const categories = {
+                technical: 0,
+                creative: 0,
+                analytical: 0,
+                leadership: 0,
+                communication: 0,
+                problemSolving: 0
+            };
+            
+            let skillCount = 0;
+            
+            userSkills.forEach(skill => {
+                const weights = skillWeights[skill] || {};
+                skillCount++;
+                
+                categories.technical += weights.technical || 5;
+                categories.creative += weights.creative || 3;
+                categories.analytical += weights.analytical || 4;
+                categories.leadership += weights.soft || 2;
+                categories.communication += weights.communication || 3;
+                categories.problemSolving += weights.technical || 5;
+            });
+            
+            if (skillCount === 0) return [50, 50, 50, 50, 50, 50];
+            
+            return [
+                Math.min(categories.technical / skillCount * 10, 100),
+                Math.min(categories.creative / skillCount * 15, 100),
+                Math.min(categories.analytical / skillCount * 12, 100),
+                Math.min(categories.leadership / skillCount * 20, 100),
+                Math.min(categories.communication / skillCount * 15, 100),
+                Math.min(categories.problemSolving / skillCount * 10, 100)
+            ];
+        }
+
+        function crackFortune() {
+            const fortuneResult = document.getElementById('fortune-result');
+            const fortuneText = document.getElementById('fortuneText');
+            
+            let selectedFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+            
+            // Personalize fortune based on skills
+            if (userSkills.length > 0) {
+                if (userSkills.some(skill => skill.toLowerCase().includes('leadership'))) {
+                    selectedFortune = "Your leadership potential will amplify the impact of every technical skill you master.";
+                } else if (userSkills.some(skill => skill.toLowerCase().includes('machine learning') || skill.toLowerCase().includes('ai'))) {
+                    selectedFortune = "You're positioned at the forefront of the AI revolution - your neural networks will reshape industries.";
+                } else if (userSkills.some(skill => skill.toLowerCase().includes('design') || skill.toLowerCase().includes('ui'))) {
+                    selectedFortune = "Your creative vision combined with technical prowess will craft experiences that delight millions.";
+                }
+            }
+            
+            fortuneText.textContent = `"${selectedFortune}"`;
+            fortuneResult.classList.remove('opacity-0', 'scale-95');
+            fortuneResult.classList.add('opacity-100', 'scale-100');
+        }
+
+        function selectScenario(type) {
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-500');
+                btn.classList.add('bg-gray-700');
+            });
+            event.target.classList.add('bg-blue-500');
+            event.target.classList.remove('bg-gray-700');
+            
+            // Update select options based on scenario
+            const select = document.getElementById('simulatorSelect');
+            select.innerHTML = '';
+            
+            switch(type) {
+                case 'skill':
+                    select.innerHTML = `
+                        <option>Select a skill...</option>
+                        <option>Machine Learning</option>
+                        <option>Blockchain</option>
+                        <option>AWS Cloud</option>
+                        <option>Data Science</option>
+                        <option>Mobile Development</option>
+                        <option>Cybersecurity</option>
+                    `;
+                    break;
+                case 'relocate':
+                    select.innerHTML = `
+                        <option>Select a location...</option>
+                        <option>San Francisco, CA</option>
+                        <option>New York, NY</option>
+                        <option>Austin, TX</option>
+                        <option>Seattle, WA</option>
+                        <option>Remote Work</option>
+                    `;
+                    break;
+                case 'industry':
+                    select.innerHTML = `
+                        <option>Select an industry...</option>
+                        <option>FinTech</option>
+                        <option>HealthTech</option>
+                        <option>E-commerce</option>
+                        <option>Gaming</option>
+                        <option>Cybersecurity</option>
+                    `;
+                    break;
+                case 'cert':
+                    select.innerHTML = `
+                        <option>Select a certification...</option>
+                        <option>AWS Solutions Architect</option>
+                        <option>Google Cloud Professional</option>
+                        <option>Certified Scrum Master</option>
+                        <option>PMP Certification</option>
+                        <option>Security+ Certification</option>
+                    `;
+                    break;
+            }
+        }
+
+        function runSimulation() {
+            const select = document.getElementById('simulatorSelect');
+            if (select.value === select.options[0].value) return;
+            
+            const resultsDiv = document.getElementById('simulation-results');
+            
+            // Generate random but realistic predictions
+            const salaryIncrease = Math.floor(Math.random() * 20) + 10; // 10-30%
+            const opportunityIncrease = Math.floor(Math.random() * 50) + 30; // 30-80%
+            const growthMultiplier = (Math.random() * 2 + 1.5).toFixed(1); // 1.5-3.5x
+            
+            resultsDiv.innerHTML = `
+                <h3 class="text-2xl font-bold mb-6">Prediction Results</h3>
+                <div class="space-y-4">
+                    <div class="bg-green-500 bg-opacity-20 p-4 rounded-xl">
+                        <div class="text-green-400 font-bold mb-2">Salary Increase</div>
+                        <div class="text-2xl font-bold">+${salaryIncrease}% - ${salaryIncrease + 10}%</div>
+                    </div>
+                    <div class="bg-blue-500 bg-opacity-20 p-4 rounded-xl">
+                        <div class="text-blue-400 font-bold mb-2">Job Opportunities</div>
+                        <div class="text-2xl font-bold">+${opportunityIncrease}% more matches</div>
+                    </div>
+                    <div class="bg-purple-500 bg-opacity-20 p-4 rounded-xl">
+                        <div class="text-purple-400 font-bold mb-2">Career Progression</div>
+                        <div class="text-2xl font-bold">${growthMultiplier}x faster growth</div>
+                    </div>
+                    <div class="bg-yellow-500 bg-opacity-20 p-4 rounded-xl">
+                        <div class="text-yellow-400 font-bold mb-2">Market Demand</div>
+                        <div class="text-2xl font-bold">High Growth Potential</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.addEventListener('resize', () => {
+            if (camera && renderer) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', initSplash);
+    </script>
+</body>
+</html>
